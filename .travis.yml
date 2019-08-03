@@ -1,0 +1,15 @@
+services:
+  - 'docker'
+script:
+  - 'make test'
+  - 'make build'
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      make push-image ;
+    fi
+
+# don't notify me when things fail
+notifications:
+  email: false
