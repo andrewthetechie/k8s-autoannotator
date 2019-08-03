@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: auto-annotator
+  namespace: kube-system
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: autoannotator-clusterrolebinding
+subjects:
+- kind: ServiceAccount
+  name: auto-annotator
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: edit
+  apiGroup: ""
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: auto-annotator
+  namespace: kube-system
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: auto-annotator
+          containers:
+            - name: auto-annotator
+              image: andrewthetechie/auto-annotator:latest
+              imagePullPolicy: Always
+              env:
+                - name: CLUSTER_FQDN
+                  value: roci.herrington.home
+          restartPolicy: OnFailure
