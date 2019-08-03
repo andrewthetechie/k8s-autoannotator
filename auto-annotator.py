@@ -5,16 +5,15 @@ from kubernetes import client, config
 CLUSTER_FDQN = os.environ.get("CLUSTER_FQDN")
 
 def add_dns(service):
+    dns_name = f"{service.metadata.name}.{CLUSTER_FDQN}"
     if service.metadata.annotations is None:
         dns_name = f"{service.metadata.name}.{CLUSTER_FDQN}"
-
     # specified an altname
-    if 'external-dns.alpha.kubernetes.io/altname' in service.metadata.annotations:
+    elif 'external-dns.alpha.kubernetes.io/altname' in service.metadata.annotations:
         logging.debug("Service named %s has an altname of %s supplied", service.metadata.name,
                       service.metadata.annotations['external-dns.alpha.kubernetes.io/altname'])
         dns_name = f"{service.metadata.service.metadata.annotations['external-dns.alpha.kubernetes.io/altname']}." \
             f"{CLUSTER_FDQN}"
-
 
     patch = {'metadata' : {'annotations': {'external-dns.alpha.kubernetes.io/hostname': dns_name}}}
     config.load_incluster_config()
