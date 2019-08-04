@@ -51,8 +51,8 @@ def main():
                         service.metadata.annotations['external-dns.alpha.kubernetes.io/nodns']:
                         logging.debug("Service named %s has nodns annotation set", service.metadata.name)
                         continue
-
-
+                logger.debug("Adding DNS for service named %s", service.metadata.name)
+                add_dns(service)
             else:
                 logger.debug("Service %s has DNS at %s", service.metadata.name,
                       service.metadata.annotations['external-dns.alpha.kubernetes.io/hostname'])
