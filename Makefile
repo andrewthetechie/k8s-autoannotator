@@ -1,13 +1,24 @@
 IMAGE := andrewthetechie/auto-annotator
+.DEFAULT_GOAL := help
 
-test:
-	true
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-40s\033[0m %s\n", $$1, $$2}'
 
-build:
-	docker build -t $(IMAGE) .
+setup: ## Setup a dev environment for working in this repo. Assumes in a venv or other isolation
+	pip install --upgrade pip poetry --constraint constraints.txt
+	poetry install
 
-push-image:
-	docker push $(IMAGE)
+build-docker: ## build docker image
+	docker build -t andrewthetechie/auto-annotator .
 
+build: ## build python packages
+	pip install --upgrade twine build --constraint constraints.txt
+	python -m build --sdist --wheel --outdir dist/
+	twine check dist/*
 
-.PHONY: image push-image test
+build-ci: setup build
+
+test: ## Run unit tests
+	poetry run pytest
+
+test-ci: setup test
