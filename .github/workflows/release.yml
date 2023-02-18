@@ -25,12 +25,6 @@ jobs:
         with:
           images: |
             andrewthetechie/auto-annotator
-          tags: |
-            type=raw,value=${{ inputs.version }}
-            # minimal (short sha)
-            type=sha,prefix=
-            # full length sha
-            type=sha,format=long,prefix=
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v3
