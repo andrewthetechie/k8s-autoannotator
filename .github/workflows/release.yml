@@ -24,7 +24,7 @@ jobs:
         id: meta
         with:
           images: |
-            ${{ github.repository }}
+            andrewthetechie/auto-annotator
           tags: |
             type=raw,value=${{ inputs.version }}
             # minimal (short sha)
