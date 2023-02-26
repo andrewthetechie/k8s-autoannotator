@@ -11,13 +11,6 @@ setup: ## Setup a dev environment for working in this repo. Assumes in a venv or
 build-docker: ## build docker image
 	docker build -t andrewthetechie/auto-annotator .
 
-build: ## build python packages
-	pip install --upgrade twine build --constraint constraints.txt
-	python -m build --sdist --wheel --outdir dist/
-	twine check dist/*
-
-build-ci: setup build
-
 test: ## Run unit tests
 	poetry run pytest
 
