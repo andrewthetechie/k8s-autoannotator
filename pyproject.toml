@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "k8s_auto_annotator"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Andrew Herrington <andrew.the.techie@gmail.com>"]
 license = "MIT"
